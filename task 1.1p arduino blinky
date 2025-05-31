@@ -1,0 +1,55 @@
+int ledPin = LED_BUILTIN;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);  
+  while (!Serial);     
+  Serial.println("Starting Morse Code Blink for: AKSHIT");
+}
+
+void loop() {
+  blinkMorse("AKSHIT");
+  delay(3000); 
+}
+
+void blinkMorse(String name) {
+  String morse[] = {
+    ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..",
+    ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",
+    "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
+
+  name.toUpperCase();
+
+  for (int i = 0; i < name.length(); i++) {
+    char c = name.charAt(i);
+    if (c >= 'A' && c <= 'Z') {
+      Serial.print("Blinking letter: ");
+      Serial.println(c);
+
+      String code = morse[c - 'A'];
+      for (int j = 0; j < code.length(); j++) {
+        if (code[j] == '.') {
+          blinkDot();
+        } else {
+          blinkDash();
+        }
+        delay(250); 
+      }
+      delay(500); 
+    }
+  }
+}
+
+void blinkDot() {
+  digitalWrite(ledPin, HIGH);
+  delay(200);
+  digitalWrite(ledPin, LOW);
+  delay(200);
+}
+
+void blinkDash() {
+  digitalWrite(ledPin, HIGH);
+  delay(600);
+  digitalWrite(ledPin, LOW);
+  delay(200);
+}
